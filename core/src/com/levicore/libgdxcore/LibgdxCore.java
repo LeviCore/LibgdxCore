@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.levicore.libgdxcore.core.State;
 import com.levicore.libgdxcore.core.Settings;
+import com.levicore.test.TestState;
 
 import java.util.Stack;
 
+import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 
 public class LibgdxCore extends ApplicationAdapter {
@@ -24,9 +26,12 @@ public class LibgdxCore extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+
         tweenManager = new TweenManager();
         inputMultiplexer = new InputMultiplexer();
         states = new Stack<>();
+
+        push(new TestState(this));
 	}
 
     /**
@@ -96,6 +101,13 @@ public class LibgdxCore extends ApplicationAdapter {
     public void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    /**
+     * Accessors and mutators
+     */
+    public TweenManager getTweenManager() {
+        return tweenManager;
     }
 
 }

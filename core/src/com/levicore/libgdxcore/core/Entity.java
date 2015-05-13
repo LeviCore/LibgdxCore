@@ -2,9 +2,15 @@ package com.levicore.libgdxcore.core;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.levicore.libgdxcore.tween.EntityAccessor;
+
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 
 /**
  * Created by user on 5/13/2015.
@@ -34,6 +40,9 @@ public class Entity extends Sprite {
         stateTime = 0;
     }
 
+    /**
+     * Update animation
+     */
     public void update(float delta) {
         if(animation != null) {
             setRegion(animation.getKeyFrame(stateTime));
@@ -41,12 +50,71 @@ public class Entity extends Sprite {
         }
     }
 
+    /**
+     * Convenience methods
+     */
     public boolean contains(float x, float y) {
         return getBoundingRectangle().contains(x, y);
     }
-
     public boolean overlaps(Rectangle rectangle) {
         return getBoundingRectangle().overlaps(rectangle);
+    }
+
+    /**
+     * Method for changing graphic on timeline.
+     * Use Tween.call() if you want to use as void method
+     */
+    public Tween setGraphic(final String image) {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                stateTime = 0;
+                animation = null;
+                getTexture().dispose();
+                setTexture(new Texture(image));
+                setSize(getTexture().getWidth(), getTexture().getHeight());
+            }
+        });
+    }
+
+    /**
+     * Method for changing animation on timeline.
+     * Use Tween.call() if you want to use as void method
+     */
+    public Tween setAnimation(final Animation newAnimation, final boolean resize) {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                stateTime = 0;
+                animation = newAnimation;
+                if(resize) {
+                    setSize(animation.getKeyFrame(0).getRegionWidth(),
+                            animation.getKeyFrame(0).getRegionHeight());
+                }
+            }
+        });
+    }
+
+    /**
+     * Interpolation of properties
+     */
+    public Tween fadeIn(float duration) {
+        return Tween.to(this, EntityAccessor.ALPHA, duration).target(1);
+    }
+    public Tween fadeOut(float duration) {
+        return Tween.to(this, EntityAccessor.ALPHA, duration).target(0);
+    }
+    public Tween fadeTo(float target, float duration) {
+        return Tween.to(this, EntityAccessor.ALPHA, duration).target(target);
+    }
+    public Tween moveTo(float x, float y, float duration) {
+        return Tween.to(this, EntityAccessor.POSXY, duration).target(x, y);
+    }
+    public Tween rotateTo(float angle, float duration) {
+        return Tween.to(this, EntityAccessor.ROTATION, duration).target(angle);
+    }
+    public Tween scaleTo(float scale, float duration) {
+        return Tween.to(this, EntityAccessor.SCALE, duration).target(scale);
     }
 
 }

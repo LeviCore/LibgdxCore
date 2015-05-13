@@ -4,11 +4,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.levicore.libgdxcore.LibgdxCore;
+import com.levicore.libgdxcore.tween.ActorAccessor;
+import com.levicore.libgdxcore.tween.EntityAccessor;
+import com.levicore.libgdxcore.tween.OrthographicCameraAccessor;
+import com.levicore.libgdxcore.tween.SpriteAccessor;
+import com.levicore.libgdxcore.tween.SpriteBatchAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenManager;
 
 
 /**
@@ -20,23 +33,35 @@ public class State extends InputAdapter {
 
     protected List<Entity> entities;
     protected OrthographicCamera camera;
+    protected TweenManager tweenManager;
 
     private Vector3 screenCoordinates;
 
-    public State(LibgdxCore core) {
+    public State(LibgdxCore core, float screenWidth, float screenHeight) {
         this.core = core;
 
         entities = new ArrayList<>();
-        camera = new OrthographicCamera(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
+        camera = new OrthographicCamera(screenWidth, screenHeight);
         screenCoordinates = new Vector3();
+
+        tweenManager = core.getTweenManager();
+
+        // Register Acessors
+        Tween.registerAccessor(Entity.class, new EntityAccessor());
+        Tween.registerAccessor(SpriteBatch.class, new SpriteBatchAccessor());
+        Tween.registerAccessor(OrthographicCamera.class, new OrthographicCameraAccessor());
+        Tween.registerAccessor(Actor.class, new ActorAccessor());
+        Tween.registerAccessor(Sprite.class, new SpriteAccessor());
     }
 
+    /**
+     * Update, render and dispose
+     */
     public void update(float delta) {
         for(Entity entity : entities) {
             entity.update(delta);
         }
     }
-
     public void render(Batch batch) {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -47,7 +72,6 @@ public class State extends InputAdapter {
 
         batch.end();
     }
-
     public void dispose() {
         for(Entity entity : entities) {
             if(entity.getTexture() != null) {
@@ -56,18 +80,25 @@ public class State extends InputAdapter {
         }
     }
 
-
     /**
      *  Pause, Play
      */
     private boolean playing = true;
-
-    public void pause() {
-        playing = false;
+    public Tween pause() {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                playing = false;
+            }
+        });
     }
-
-    public void resume() {
-        playing = true;
+    public Tween resume() {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                playing = true;
+            }
+        });
     }
 
     public boolean isPlaying() {
@@ -78,13 +109,21 @@ public class State extends InputAdapter {
      * Visibility
      */
     public boolean visible = true;
-
-    public void show() {
-        visible = true;
+    public Tween show() {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                visible = false;
+            }
+        });
     }
-
-    public void hide() {
-        visible = false;
+    public Tween hide() {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                visible = false;
+            }
+        });
     }
 
     public boolean isVisible() {
@@ -100,4 +139,5 @@ public class State extends InputAdapter {
 
         return screenCoordinates;
     }
+
 }
