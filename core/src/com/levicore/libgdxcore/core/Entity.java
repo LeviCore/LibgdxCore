@@ -50,6 +50,7 @@ public class Entity extends Sprite {
         }
     }
 
+
     /**
      * Convenience methods
      */
@@ -60,9 +61,9 @@ public class Entity extends Sprite {
         return getBoundingRectangle().overlaps(rectangle);
     }
 
+
     /**
      * Method for changing graphic on timeline.
-     * Use Tween.call() if you want to use as void method
      */
     public Tween setGraphic(final String image) {
         return Tween.call(new TweenCallback() {
@@ -76,10 +77,24 @@ public class Entity extends Sprite {
             }
         });
     }
+    public void setGraphic_void(String image) {
+        stateTime = 0;
+        animation = null;
+        getTexture().dispose();
+        setTexture(new Texture(image));
+        setSize(getTexture().getWidth(), getTexture().getHeight());
+    }
+    public void setGraphic_void(Texture texture) {
+        stateTime = 0;
+        animation = null;
+        getTexture().dispose();
+        setTexture(texture);
+        setSize(getTexture().getWidth(), getTexture().getHeight());
+    }
+
 
     /**
      * Method for changing animation on timeline.
-     * Use Tween.call() if you want to use as void method
      */
     public Tween setAnimation(final Animation newAnimation, final boolean resize) {
         return Tween.call(new TweenCallback() {
@@ -94,6 +109,15 @@ public class Entity extends Sprite {
             }
         });
     }
+    public void setAnimation_void(Animation newAnimation, boolean resize) {
+        stateTime = 0;
+        animation = newAnimation;
+        if(resize) {
+            setSize(animation.getKeyFrame(0).getRegionWidth(),
+                    animation.getKeyFrame(0).getRegionHeight());
+        }
+    }
+
 
     /**
      * Interpolation of properties

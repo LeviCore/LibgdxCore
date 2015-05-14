@@ -1,13 +1,20 @@
 Credits {
+
     Auriel Ribbon - Tween Engine
 }
 
 Todos {
-    Temporary Animation(Entity)
 
-    Physics Entity
-    Button Entity
-    Text Entity
+    0.3 {
+        Temporary Animation(Entity),
+        Physics Entity,
+        Button Entity,
+        Text Entity,
+    }
+
+    0.4 {
+        Multi resolution support,
+    }
 }
 
 Changes {
@@ -23,6 +30,11 @@ Changes {
             Selection
             OptionCallback
         }
+    }
+
+    0.3 {
+        Added void method of setGraphic() and setAnimation of Entity class
+        Added Button class.
     }
 
 }

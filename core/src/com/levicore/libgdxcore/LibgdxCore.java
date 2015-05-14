@@ -28,7 +28,10 @@ public class LibgdxCore extends ApplicationAdapter {
 		batch = new SpriteBatch();
 
         tweenManager = new TweenManager();
+
         inputMultiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
         states = new Stack<>();
 
         push(new TestState(this));
@@ -76,11 +79,13 @@ public class LibgdxCore extends ApplicationAdapter {
         clearScreen();
         update();
 
+        batch.begin();
         for(State state : states) {
             if(state.isVisible()) {
                 state.render(batch);
             }
         }
+        batch.end();
 	}
 
     /**

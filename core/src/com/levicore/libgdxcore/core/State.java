@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.levicore.libgdxcore.LibgdxCore;
+import com.levicore.libgdxcore.entities.Button;
 import com.levicore.libgdxcore.tween.ActorAccessor;
 import com.levicore.libgdxcore.tween.EntityAccessor;
 import com.levicore.libgdxcore.tween.OrthographicCameraAccessor;
@@ -64,13 +65,9 @@ public class State extends InputAdapter {
     }
     public void render(Batch batch) {
         batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-
         for(Entity entity : entities) {
             entity.draw(batch);
         }
-
-        batch.end();
     }
     public void dispose() {
         for(Entity entity : entities) {
@@ -78,6 +75,47 @@ public class State extends InputAdapter {
                 entity.getTexture().dispose();
             }
         }
+    }
+
+
+    /**
+     * Touch inputs
+     */
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for(Entity entity : entities) {
+            if(entity instanceof Button) {
+                if(entity.contains(getScreenCoordinates().x, getScreenCoordinates().y)) {
+                    ((Button) entity).setToTouchDownGraphic();
+
+                    if(((Button) entity).getOnTouchdown() != null) {
+                        ((Button) entity).getOnTouchdown().execute();
+                    }
+                }
+            }
+        }
+        return super.touchDown(screenX, screenY, pointer, button);
+    }
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        for(Entity entity : entities) {
+            if(entity instanceof Button) {
+                Button button_ = ((Button) entity);
+
+                if(!entity.contains(getScreenCoordinates().x, getScreenCoordinates().y)) {
+                    button_.setToTouchUpGraphic();
+                } else {
+                    if(button_.getOnTouchUp() != null) {
+                        button_.getOnTouchUp().execute();
+                    }
+                }
+            }
+        }
+        return super.touchUp(screenX, screenY, pointer, button);
+    }
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return super.touchDragged(screenX, screenY, pointer);
     }
 
     /**
@@ -139,5 +177,8 @@ public class State extends InputAdapter {
 
         return screenCoordinates;
     }
+
+
+
 
 }
