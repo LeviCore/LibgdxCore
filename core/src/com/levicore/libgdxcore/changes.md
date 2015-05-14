@@ -5,14 +5,13 @@ Credits {
 
 Todos {
 
-    0.3 {
+    0.4 {
         Temporary Animation(Entity),
         Physics Entity,
-        Button Entity,
         Text Entity,
     }
 
-    0.4 {
+    0.5 {
         Multi resolution support,
     }
 }
