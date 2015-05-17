@@ -17,8 +17,8 @@ import aurelienribon.tweenengine.TweenCallback;
  */
 public class Entity extends Sprite {
 
-    protected float stateTime;
-    protected Animation animation;
+    private float stateTime;
+    private Animation animation;
 
     protected Entity() {
         super();
@@ -141,4 +141,20 @@ public class Entity extends Sprite {
         return Tween.to(this, EntityAccessor.SCALE, duration).target(scale);
     }
 
+    /**
+     * Accessors and mutators
+     */
+    public Animation getAnimation() {
+        return animation;
+    }
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
 }

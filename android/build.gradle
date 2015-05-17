@@ -106,7 +106,7 @@ idea {
                 builder.current = node;
                 builder.component(name: "FacetManager") {
                     facet(type: "android", name: "Android") {
-                        configuration {
+                        configuration {~
                             option(name: "UPDATE_PROPERTY_FILES", value:"true")
                         }
                     }

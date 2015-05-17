@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.levicore.libgdxcore.LibgdxCore;
 import com.levicore.libgdxcore.entities.Button;
+import com.levicore.libgdxcore.entities.TemporaryAnimation;
 import com.levicore.libgdxcore.tween.ActorAccessor;
 import com.levicore.libgdxcore.tween.EntityAccessor;
 import com.levicore.libgdxcore.tween.OrthographicCameraAccessor;
@@ -61,6 +62,12 @@ public class State extends InputAdapter {
     public void update(float delta) {
         for(Entity entity : entities) {
             entity.update(delta);
+
+            if(entity instanceof TemporaryAnimation) {
+                if(entity.getAnimation().isAnimationFinished(entity.getStateTime())) {
+                    entities.remove(entity);
+                }
+            }
         }
     }
     public void render(Batch batch) {
@@ -96,6 +103,7 @@ public class State extends InputAdapter {
         }
         return super.touchDown(screenX, screenY, pointer, button);
     }
+
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         for(Entity entity : entities) {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" source="tiles-template.tsx"/>
+ <layer name="navigation" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYIJiFiTMhAdTSx0DHnUMZKhjg/KR1SEDZD3o6piorA6bvcSECwC7KADf
+  </data>
+ </layer>
+</map>

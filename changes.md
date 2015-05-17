@@ -1,9 +1,13 @@
 Credits {
-
     Auriel Ribbon - Tween Engine
 }
 
 Todos {
+
+    0.5 {
+        Fix TextEntity to adapt to gdx 1.6.0 changes
+        Test TemporaryAnimation and PercentageBar
+    }
 
     0.4 {
         Temporary Animation(Entity),
@@ -34,6 +38,11 @@ Changes {
     0.3 {
         Added void method of setGraphic() and setAnimation of Entity class
         Added Button class.
+    }
+
+    0.4 {
+        Added TemporayAnimation
+        Added ProgressBar
     }
 
 }
